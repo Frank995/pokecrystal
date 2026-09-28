@@ -232,42 +232,6 @@ GSIntro_LoadMonPalette: ; unreferenced
 	call LoadPalette_White_Col1_Col2_Black
 	ret
 
-LoadTrainerClassPaletteAsNthBGPal:
-	ld a, [wTrainerClass]
-	call GetTrainerPalettePointer
-	ld a, e
-	jr LoadNthMiddleBGPal
-
-LoadMonPaletteAsNthBGPal:
-	ld a, [wCurPartySpecies]
-	call _GetMonPalettePointer
-	ld a, e
-	bit 7, a
-	jr z, LoadNthMiddleBGPal
-	and $7f
-	inc hl
-	inc hl
-	inc hl
-	inc hl
-
-LoadNthMiddleBGPal:
-	push hl
-	ld hl, wBGPals1
-	ld de, 1 palettes
-.loop
-	and a
-	jr z, .got_addr
-	add hl, de
-	dec a
-	jr .loop
-
-.got_addr
-	ld e, l
-	ld d, h
-	pop hl
-	call LoadPalette_White_Col1_Col2_Black
-	ret
-
 LoadBetaPokerPalettes: ; unreferenced
 	ldh a, [hCGB]
 	and a
@@ -1294,8 +1258,6 @@ endr
 
 INCLUDE "data/maps/environment_colors.asm"
 
-PartyMenuBGMobilePalette:
-INCLUDE "gfx/stats/party_menu_bg_mobile.pal"
 
 PartyMenuBGPalette:
 INCLUDE "gfx/stats/party_menu_bg.pal"

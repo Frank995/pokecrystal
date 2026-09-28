@@ -1,17 +1,8 @@
 InitCrystalData:
 	xor a
 	ld [wPlayerGender], a
-	ld [wd002], a
-	ld [wd003], a
-	ld a, [wCrystalFlags]
-	res 0, a ; ???
-	ld [wCrystalFlags], a
-	ld a, [wCrystalFlags]
-	res 1, a ; ???
-	ld [wCrystalFlags], a
 	ret
 
-INCLUDE "mobile/mobile_12.asm"
 
 InitGender:
 	call InitGenderScreen

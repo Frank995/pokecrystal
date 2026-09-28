@@ -147,7 +147,6 @@ WildFled_EnemyFled_LinkBattleCanceled:
 
 BattleTurn:
 .loop
-	call Stubbed_Increments5_a89a
 	call CheckContestBattleOver
 	jp c, .quit
 
@@ -204,24 +203,6 @@ BattleTurn:
 	jp .loop
 
 .quit
-	ret
-
-Stubbed_Increments5_a89a:
-	ret
-	ld a, BANK(s5_a89a) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	ld hl, s5_a89a + 1 ; address of MBC30 bank
-	inc [hl]
-	jr nz, .finish
-	dec hl
-	inc [hl]
-	jr nz, .finish
-	dec [hl]
-	inc hl
-	dec [hl]
-
-.finish
-	call CloseSRAM
 	ret
 
 HandleBetweenTurnEffects:
@@ -2484,7 +2465,6 @@ AddBattleMoneyToAccount:
 	push bc
 	ld b, h
 	ld c, l
-	farcall StubbedTrainerRankings_AddToBattlePayouts
 	pop bc
 	pop hl
 .loop
@@ -7892,7 +7872,6 @@ CallDoBattle: ; unreferenced
 	ret
 
 BattleIntro:
-	farcall StubbedTrainerRankings_Battles ; mobile
 	call LoadTrainerOrWildMonPic
 	xor a
 	ld [wTempBattleMonSpecies], a
@@ -7973,7 +7952,6 @@ BackUpBGMap2:
 
 InitEnemyTrainer:
 	ld [wTrainerClass], a
-	farcall StubbedTrainerRankings_TrainerBattles
 	xor a
 	ld [wTempEnemyMonSpecies], a
 	callfar GetTrainerAttributes
@@ -8029,7 +8007,6 @@ InitEnemyTrainer:
 InitEnemyWildmon:
 	ld a, WILD_BATTLE
 	ld [wBattleMode], a
-	farcall StubbedTrainerRankings_WildBattles
 	call LoadEnemyMon
 	ld hl, wEnemyMonMoves
 	ld de, wWildMonMoves
@@ -8205,7 +8182,6 @@ CheckPayDay:
 	ret
 
 ShowLinkBattleParticipantsAfterEnd:
-	farcall StubbedTrainerRankings_LinkBattles
 	farcall BackupGSBallFlag
 	ld a, [wCurOTMon]
 	ld hl, wOTPartyMon1Status
@@ -8223,17 +8199,14 @@ DisplayLinkBattleResult:
 	jr c, .win ; WIN
 	jr z, .lose ; LOSE
 	; DRAW
-	farcall StubbedTrainerRankings_ColosseumDraws
 	ld de, .Draw
 	jr .store_result
 
 .win
-	farcall StubbedTrainerRankings_ColosseumWins
 	ld de, .YouWin
 	jr .store_result
 
 .lose
-	farcall StubbedTrainerRankings_ColosseumLosses
 	ld de, .YouLose
 	jr .store_result
 
@@ -8931,7 +8904,6 @@ BattleStartMessage:
 	cp BATTLETYPE_FISH
 	jr nz, .NotFishing
 
-	farcall StubbedTrainerRankings_HookedEncounters
 
 	ld hl, HookedPokemonAttackedText
 	jr .PrintBattleStartText

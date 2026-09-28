@@ -1,7 +1,7 @@
 ; Functions relating to the timer interrupt and the real-time-clock.
 
 TimerInterrupt::
-; The Mobile Adapter GB is never connected, so this interrupt has nothing to do.
+; The timer interrupt is unused.
 	reti
 
 LatchClock::

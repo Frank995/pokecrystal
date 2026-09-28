@@ -12,9 +12,6 @@
 	const MAINMENUITEM_MYSTERY_GIFT ; 3
 	const MAINMENUITEM_DEBUG_ROOM   ; 4
 
-MobileMenuGFX:
-INCBIN "gfx/mobile/mobile_menu.2bpp"
-
 MainMenu:
 .loop
 	xor a
@@ -275,3 +272,9 @@ MainMenu_Continue:
 MainMenu_MysteryGift:
 	farcall MysteryGift
 	ret
+
+if DEF(_DEBUG)
+MainMenu_DebugRoom:
+	farcall _DebugRoom
+	ret
+endc

@@ -262,36 +262,6 @@ _MysteryGiftSentHomeText::
 	text "'s home."
 	prompt
 
-_NameCardReceivedCardText::
-	text "Received"
-	line "@"
-	text_ram wMysteryGiftCardHolderName
-	text "'s CARD."
-	prompt
-
-_NameCardListedCardText::
-	text_ram wMysteryGiftCardHolderName
-	text "'s CARD was"
-	line "listed as no.@"
-	text_decimal wTextDecimalByte, 1, 2
-	text "."
-	prompt
-
-_NameCardNotRegisteredCardText::
-	text "The CARD was not"
-	line "registered."
-	prompt
-
-_NameCardLinkCancelledText::
-	text "The link has been"
-	line "cancelled."
-	prompt
-
-_NameCardLinkCommErrorText::
-	text "Communication"
-	line "error."
-	prompt
-
 _BadgeRequiredText::
 	text "Sorry! A new BADGE"
 	line "is required."
@@ -1347,27 +1317,6 @@ _OakRating19::
 _OakPCText4::
 	text "The link to PROF."
 	line "OAK's PC closed."
-	done
-
-_TrainerRankingExplanationText:: ; unreferenced
-	text "Triple-theme"
-	line "trainer ranking!"
-
-	para "The SAVE file you"
-	line "just sent might"
-	cont "make the rankings!"
-
-	para ""
-	done
-
-_TrainerRankingNoDataText:: ; unreferenced
-	text "There is no"
-	line "ranking data."
-
-	para "Link to obtain"
-	line "ranking data."
-
-	para ""
 	done
 
 _MemoryGameYeahText::

@@ -390,29 +390,6 @@ EraseHallOfFame:
 	call ByteFill
 	jp CloseSRAM
 
-InitDefaultEZChatMsgs: ; unreferenced
-	ld a, BANK(sEZChatMessages) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	ld hl, .Data
-	ld de, sEZChatMessages
-	ld bc, EASY_CHAT_MESSAGE_LENGTH * 4
-	call CopyBytes
-	jp CloseSRAM
-
-.Data:
-; introduction
-	db $0d, EZCHAT_GREETINGS,    $00, EZCHAT_EXCLAMATIONS, $00, EZCHAT_POKEMON
-	db $22, EZCHAT_GREETINGS,    $01, EZCHAT_EXCLAMATIONS, $00, EZCHAT_POKEMON
-; begin battle
-	db $03, EZCHAT_BATTLE,       $05, EZCHAT_CONDITIONS,   $03, EZCHAT_EXCLAMATIONS
-	db $0e, EZCHAT_CONVERSATION, $03, EZCHAT_GREETINGS,    $00, EZCHAT_POKEMON
-; win battle
-	db $39, EZCHAT_FEELINGS,     $07, EZCHAT_BATTLE,       $00, EZCHAT_EXCLAMATIONS
-	db $04, EZCHAT_FEELINGS,     $01, EZCHAT_EXCLAMATIONS, $00, EZCHAT_POKEMON
-; lose battle
-	db $0f, EZCHAT_EXCLAMATIONS, $14, EZCHAT_FEELINGS,     $05, EZCHAT_EXCLAMATIONS
-	db $11, EZCHAT_TIME,         $0c, EZCHAT_CONVERSATION, $06, EZCHAT_BATTLE
-
 EraseBattleTowerStatus:
 	ld a, BANK(sBattleTowerChallengeState)
 	call OpenSRAM
@@ -422,21 +399,6 @@ EraseBattleTowerStatus:
 
 SaveData:
 	call _SaveData
-	ret
-
-Function14d6c: ; unreferenced
-	ld a, BANK(s4_a60b) ; MBC30 bank used by JP Crystal; inaccessible by MBC3
-	call OpenSRAM
-	ld a, [s4_a60b] ; address of MBC30 bank
-	ld b, $0
-	and a
-	jr z, .ok
-	ld b, $2
-
-.ok
-	ld a, b
-	ld [s4_a60b], a ; address of MBC30 bank
-	call CloseSRAM
 	ret
 
 HallOfFame_InitSaveIfNeeded:
@@ -799,9 +761,7 @@ VerifyBackupChecksum:
 	ret
 
 _SaveData:
-	; This is called within two scenarios:
-	;   a) ErasePreviousSave (the process of erasing the save from a previous game file)
-	;   b) unused mobile functionality
+	; This is called by ErasePreviousSave (the process of erasing the save from a previous game file).
 	; It is not part of a regular save.
 
 	ld a, BANK(sCrystalData)
@@ -810,18 +770,6 @@ _SaveData:
 	ld de, sCrystalData
 	ld bc, wCrystalDataEnd - wCrystalData
 	call CopyBytes
-
-	; This block originally had some mobile functionality, but since we're still in
-	; BANK(sCrystalData), it instead overwrites the sixteen wEventFlags starting at 1:sCrystalFlags with
-	; garbage from wCrystalFlags. This isn't an issue, since ErasePreviousSave is followed by a regular
-	; save that unwrites the garbage.
-
-	ld hl, wCrystalFlags
-	ld a, [hli]
-	ld [sCrystalFlags + 0], a
-	ld a, [hli]
-	ld [sCrystalFlags + 1], a
-
 	jp CloseSRAM
 
 _LoadData:
@@ -831,16 +779,6 @@ _LoadData:
 	ld de, wCrystalData
 	ld bc, wCrystalDataEnd - wCrystalData
 	call CopyBytes
-
-	; This block originally had some mobile functionality to mirror _SaveData above, but instead it
-	; (harmlessly) writes the aforementioned wEventFlags to the unused wCrystalFlags.
-
-	ld hl, wCrystalFlags
-	ld a, [sCrystalFlags + 0]
-	ld [hli], a
-	ld a, [sCrystalFlags + 1]
-	ld [hli], a
-
 	jp CloseSRAM
 
 GetBoxAddress:

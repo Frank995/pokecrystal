@@ -43,7 +43,6 @@ BattleBGMap:
 	ret
 
 HalveMoney:
-	farcall StubbedTrainerRankings_WhiteOuts
 
 ; Halve the player's money.
 	ld hl, wMoney

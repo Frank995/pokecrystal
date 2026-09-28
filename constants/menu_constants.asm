@@ -101,7 +101,6 @@ DEF HMENURETURN_ASM    EQU %11111111
 	const PARTYMENUACTION_GIVE_MON
 	const PARTYMENUACTION_GIVE_MON_FEMALE ; unused
 	const PARTYMENUACTION_GIVE_ITEM
-	const PARTYMENUACTION_MOBILE ; mobile
 DEF NUM_PARTYMENUACTIONS EQU const_value
 ; PrintPartyMenuActionText arguments (see engine/pokemon/party_menu.asm)
 	const_next $f0
@@ -123,7 +122,7 @@ DEF NUM_PARTYMENUACTIONS EQU const_value
 	const NAME_RIVAL
 	const NAME_MOM
 	const NAME_BOX
-	const NAME_FRIEND
+	const NAME_5 ; duplicate of NAME_MON
 	const NAME_6 ; duplicate of NAME_MON
 	const NAME_7 ; duplicate of NAME_MON
 DEF NUM_NAMING_SCREEN_TYPES EQU const_value

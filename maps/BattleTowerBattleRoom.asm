@@ -82,8 +82,6 @@ Script_DontSaveAndEndTheSession:
 	iffalse Script_ContinueAndBattleNextOpponent
 	setval BATTLETOWERACTION_CHALLENGECANCELED
 	special BattleTowerAction
-	setval BATTLETOWERACTION_06
-	special BattleTowerAction
 	closetext
 	special FadeOutToWhite
 	warpfacing UP, BATTLE_TOWER_1F, 7, 7
@@ -122,8 +120,6 @@ Script_TooMuchTimeElapsedNoRegister: ; unreferenced
 
 Script_ChallengeCanceled: ; unreferenced
 	setval BATTLETOWERACTION_CHALLENGECANCELED
-	special BattleTowerAction
-	setval BATTLETOWERACTION_06
 	special BattleTowerAction
 	opentext
 	writetext Text_ThanksForVisiting

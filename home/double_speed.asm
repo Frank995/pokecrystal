@@ -5,12 +5,6 @@
 ; and double speed at any time, but LCD output
 ; collapses during the switch.
 
-DoubleSpeed::
-	ld hl, rSPD
-	bit B_SPD_DOUBLE, [hl]
-	jr z, SwitchSpeed
-	ret
-
 NormalSpeed::
 	ld hl, rSPD
 	bit B_SPD_DOUBLE, [hl]

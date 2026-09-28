@@ -33,8 +33,6 @@ BattleTower1FCheckStateScene:
 	sdefer BattleTower_LeftWithoutSaving
 	setval BATTLETOWERACTION_CHALLENGECANCELED
 	special BattleTowerAction
-	setval BATTLETOWERACTION_06
-	special BattleTowerAction
 .SkipEverything:
 	setscene SCENE_BATTLETOWER1F_NOOP
 	; fallthrough
@@ -66,7 +64,6 @@ BattleTower1FReceptionistScript:
 
 Script_Menu_ChallengeExplanationCancel:
 	writetext Text_WantToGoIntoABattleRoom
-	setval TRUE
 	special Menu_ChallengeExplanationCancel
 	ifequal 1, Script_ChooseChallenge
 	ifequal 2, Script_BattleTowerExplanation
@@ -88,9 +85,6 @@ Script_ChooseChallenge:
 	special BattleTowerAction
 	special BattleTowerRoomMenu
 	ifequal $a, Script_Menu_ChallengeExplanationCancel
-	ifnotequal $0, Script_MobileError
-	setval BATTLETOWERACTION_11
-	special BattleTowerAction
 	writetext Text_RightThisWayToYourBattleRoom
 	waitbutton
 	closetext
@@ -157,75 +151,6 @@ Script_BattleTowerHopeToServeYouAgain:
 
 Script_WaitButton:
 	waitbutton
-	closetext
-	end
-
-Script_ChooseChallenge2: ; unreferenced
-	writetext Text_SaveBeforeEnteringBattleRoom
-	yesorno
-	iffalse Script_Menu_ChallengeExplanationCancel
-	special TryQuickSave
-	iffalse Script_Menu_ChallengeExplanationCancel
-	setval BATTLETOWERACTION_SET_EXPLANATION_READ
-	special BattleTowerAction
-	special Function1700ba
-	ifequal $a, Script_Menu_ChallengeExplanationCancel
-	ifnotequal $0, Script_MobileError
-	writetext Text_ReceivedAListOfLeadersOnTheHonorRoll
-	turnobject BATTLETOWER1F_RECEPTIONIST, LEFT
-	writetext Text_PleaseConfirmOnThisMonitor
-	waitbutton
-	turnobject BATTLETOWER1F_RECEPTIONIST, DOWN
-	closetext
-	end
-
-Script_StartChallenge: ; unreferenced
-	setval BATTLETOWERACTION_LEVEL_CHECK
-	special BattleTowerAction
-	ifnotequal $0, Script_AMonLevelExceeds
-	setval BATTLETOWERACTION_UBERS_CHECK
-	special BattleTowerAction
-	ifnotequal $0, Script_MayNotEnterABattleRoomUnderL70
-	special CheckForBattleTowerRules
-	ifnotequal FALSE, Script_WaitButton
-	setval BATTLETOWERACTION_05
-	special BattleTowerAction
-	ifequal $0, .zero
-	writetext Text_CantBeRegistered_PreviousRecordDeleted
-	sjump .continue
-
-.zero
-	writetext Text_CantBeRegistered
-.continue
-	yesorno
-	iffalse Script_Menu_ChallengeExplanationCancel
-	writetext Text_SaveBeforeReentry
-	yesorno
-	iffalse Script_Menu_ChallengeExplanationCancel
-	setscene SCENE_BATTLETOWER1F_CHECKSTATE
-	special TryQuickSave
-	iffalse Script_Menu_ChallengeExplanationCancel
-	setscene SCENE_BATTLETOWER1F_NOOP
-	setval BATTLETOWERACTION_06
-	special BattleTowerAction
-	setval BATTLETOWERACTION_12
-	special BattleTowerAction
-	writetext Text_RightThisWayToYourBattleRoom
-	waitbutton
-	sjump Script_ResumeBattleTowerChallenge
-
-Script_AMonLevelExceeds:
-	writetext Text_AMonLevelExceeds
-	waitbutton
-	sjump Script_Menu_ChallengeExplanationCancel
-
-Script_MayNotEnterABattleRoomUnderL70:
-	writetext Text_MayNotEnterABattleRoomUnderL70
-	waitbutton
-	sjump Script_Menu_ChallengeExplanationCancel
-
-Script_MobileError:
-	special BattleTowerMobileError
 	closetext
 	end
 
@@ -451,19 +376,6 @@ Text_BattleTowerIntroduction_2:
 	para ""
 	done
 
-Text_ReceivedAListOfLeadersOnTheHonorRoll:
-	text "Received a list of"
-	line "LEADERS on the"
-	cont "HONOR ROLL."
-
-	para ""
-	done
-
-Text_PleaseConfirmOnThisMonitor:
-	text "Please confirm on"
-	line "this monitor."
-	done
-
 Text_ThankYou: ; unreferenced
 	text "Thank you!"
 
@@ -525,26 +437,6 @@ Text_WouldYouLikeToHearAboutTheBattleTower:
 	text "Would you like to"
 	line "hear about the"
 	cont "BATTLE TOWER?"
-	done
-
-Text_CantBeRegistered:
-	text "Your record from"
-	line "the previous"
-
-	para "BATTLE ROOM can't"
-	line "be registered. OK?"
-	done
-
-Text_CantBeRegistered_PreviousRecordDeleted:
-	text "Your record from"
-	line "the previous"
-
-	para "BATTLE ROOM can't"
-	line "be registered."
-
-	para "Also, the existing"
-	line "record will be"
-	cont "deleted. OK?"
 	done
 
 Text_CheckTheLeaderHonorRoll: ; unreferenced
@@ -617,14 +509,6 @@ Text_SaveAndEndTheSession:
 	line "session?"
 	done
 
-Text_SaveBeforeReentry:
-	text "Your record will"
-	line "be SAVED before"
-
-	para "you go back into"
-	line "the previous ROOM."
-	done
-
 Text_CancelYourBattleRoomChallenge:
 	text "Cancel your BATTLE"
 	line "ROOM challenge?"
@@ -651,26 +535,6 @@ Text_TooMuchTimeElapsedNoRegister:
 	para "elapsed since the"
 	line "start of your"
 	cont "challenge."
-	done
-
-Text_AMonLevelExceeds:
-	text "One or more of"
-	line "your #MON's"
-	cont "levels exceeds @"
-	text_decimal wScriptVar, 1, 3
-	text "."
-	done
-
-Text_MayNotEnterABattleRoomUnderL70:
-	text_ram wcd49
-	text " may not"
-	line "enter a BATTLE"
-	cont "ROOM under L70."
-
-	para "This BATTLE ROOM"
-	line "is for L@"
-	text_decimal wScriptVar, 1, 3
-	text "."
 	done
 
 Text_BattleTowerYoungster:

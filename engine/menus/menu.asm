@@ -31,43 +31,6 @@ Get2DMenuSelection:
 	call Init2DMenuCursorPosition
 	call StaticMenuJoypad
 	call MenuClickSound
-Mobile_GetMenuSelection:
-	ld a, [wMenuDataFlags]
-	bit STATICMENU_ENABLE_SELECT_F, a
-	jr z, .skip
-	call GetMenuJoypad
-	bit B_PAD_SELECT, a
-	jr nz, .quit1
-
-.skip
-	ld a, [wMenuDataFlags]
-	bit STATICMENU_DISABLE_B_F, a
-	jr nz, .skip2
-	call GetMenuJoypad
-	bit B_PAD_B, a
-	jr nz, .quit2
-
-.skip2
-	ld a, [w2DMenuNumCols]
-	ld c, a
-	ld a, [wMenuCursorY]
-	dec a
-	call SimpleMultiply
-	ld c, a
-	ld a, [wMenuCursorX]
-	add c
-	ld [wMenuCursorPosition], a
-	and a
-	ret
-
-.quit1
-	scf
-	ret
-
-.quit2
-	scf
-	ret
-
 Get2DMenuNumberOfColumns:
 	ld a, [wMenuData_2DMenuDimensions]
 	and $f
@@ -219,22 +182,6 @@ _ScrollingMenuJoypad::
 	call MenuJoypadLoop
 	pop af
 	ldh [hBGMapMode], a
-	ret
-
-MobileMenuJoypad:
-	ld hl, w2DMenuFlags2
-	res _2DMENU_DISABLE_JOYPAD_FILTER_F, [hl]
-	ldh a, [hBGMapMode]
-	push af
-	call Move2DMenuCursor
-	call Do2DMenuRTCJoypad
-	jr nc, .skip_joypad
-	call _2DMenuInterpretJoypad
-.skip_joypad
-	pop af
-	ldh [hBGMapMode], a
-	call GetMenuJoypad
-	ld c, a
 	ret
 
 MenuJoypadLoop:

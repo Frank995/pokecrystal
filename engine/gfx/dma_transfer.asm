@@ -77,37 +77,6 @@ HDMATransferTilemapAndAttrmap_Overworld::
 
 	ret
 
-Mobile_HDMATransferTilemapAndAttrmap_Overworld:
-	ld hl, HDMATransferTilemapAndAttrmap_Overworld ; useless
-	ld hl, .Function
-	jp CallInSafeGFXMode
-
-.Function:
-	decoord 0, 0, wAttrmap
-	ld hl, wScratchAttrmap
-	call PadAttrmapForHDMATransfer
-	decoord 0, 0
-	ld hl, wScratchTilemap
-	call PadTilemapForHDMATransfer
-	call DelayFrame
-
-	di
-	ldh a, [rVBK]
-	push af
-	ld a, $1
-	ldh [rVBK], a
-	ld hl, wScratchAttrmap
-	call HDMATransfer_NoDI
-	ld a, $0
-	ldh [rVBK], a
-	ld hl, wScratchTilemap
-	call HDMATransfer_NoDI
-	pop af
-	ldh [rVBK], a
-	ei
-
-	ret
-
 Function1040d4: ; unreferenced
 	ld hl, .Function
 	jp CallInSafeGFXMode
@@ -176,32 +145,6 @@ _HDMATransferTilemapAndAttrmap_Menu::
 	ei
 	ret
 
-Mobile_HDMATransferTilemapAndAttrmap_Menu:
-	ld hl, .Function
-	jp CallInSafeGFXMode
-
-.Function:
-	; Transfer wAttrmap and Tilemap to BGMap
-	; Fill vBGAttrs with $00
-	; Fill vBGTiles with $ff
-	decoord 0, 0, wAttrmap
-	ld hl, wScratchAttrmap
-	call PadAttrmapForHDMATransfer
-	ld c, $ff
-	decoord 0, 0
-	ld hl, wScratchTilemap
-	call PadMapForHDMATransfer
-
-	ld a, $1
-	ldh [rVBK], a
-	ld hl, wScratchAttrmap
-	call HDMATransfer_WaitForScanline128_toBGMap
-	ld a, $0
-	ldh [rVBK], a
-	ld hl, wScratchTilemap
-	call HDMATransfer_WaitForScanline128_toBGMap
-	ret
-
 CallInSafeGFXMode:
 	ldh a, [hBGMapMode]
 	push af
@@ -267,65 +210,6 @@ HDMATransfer_WaitForScanline124_toBGMap:
 	ld e, a
 	ld c, 2 * SCREEN_HEIGHT
 	jr HDMATransfer_WaitForScanline124
-
-HDMATransfer_NoDI:
-; HDMA transfer from hl to [hBGMapAddress]
-; [hBGMapAddress] --> de
-; 2 * SCREEN_HEIGHT --> c
-	ldh a, [hBGMapAddress + 1]
-	ld d, a
-	ldh a, [hBGMapAddress]
-	ld e, a
-	ld c, 2 * SCREEN_HEIGHT
-
-	; [rVDMA_SRC_HIGH, rVDMA_SRC_LOW] = hl & $fff0
-	ld a, h
-	ldh [rVDMA_SRC_HIGH], a
-	ld a, l
-	and $f0
-	ldh [rVDMA_SRC_LOW], a
-	; [rVDMA_DEST_HIGH, rVDMA_DEST_LOW] = de & $1ff0
-	ld a, d
-	and $1f
-	ldh [rVDMA_DEST_HIGH], a
-	ld a, e
-	and $f0
-	ldh [rVDMA_DEST_LOW], a
-	; b = c | %10000000
-	ld a, c
-	dec c
-	or $80
-	ld b, a
-	; d = $7f - c + 1
-	ld a, $7f
-	sub c
-	ld d, a
-	; while [rLY] >= d: pass
-.loop1
-	ldh a, [rLY]
-	cp d
-	jr nc, .loop1
-	; while not [rSTAT] & 3: pass
-.loop2
-	ldh a, [rSTAT]
-	and STAT_MODE
-	jr z, .loop2
-	; load the 5th byte of HDMA
-	ld a, b
-	ldh [rVDMA_LEN], a
-	; wait until rLY advances (c + 1) times
-	ldh a, [rLY]
-	inc c
-	ld hl, rLY
-.loop3
-	cp [hl]
-	jr z, .loop3
-	ld a, [hl]
-	dec c
-	jr nz, .loop3
-	ld hl, rVDMA_LEN
-	res 7, [hl]
-	ret
 
 HDMATransfer_WaitForScanline124:
 	ld b, $7b

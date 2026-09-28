@@ -39,8 +39,6 @@ LoadMenuMonIcon:
 	dw NamingScreen_InitAnimatedMonIcon ; MONICON_NAMINGSCREEN
 	dw MoveList_InitAnimatedMonIcon     ; MONICON_MOVES
 	dw Trade_LoadMonIconGFX             ; MONICON_TRADE
-	dw Mobile_InitAnimatedMonIcon       ; MONICON_MOBILE1
-	dw Mobile_InitPartyMenuBGPal71      ; MONICON_MOBILE2
 	dw Unused_InitFastAnimatedMonIcon   ; MONICON_UNUSED
 
 Unused_InitFastAnimatedMonIcon:
@@ -78,43 +76,6 @@ Unused_InitFastAnimatedMonIcon:
 	ld hl, SPRITEANIMSTRUCT_FRAMESET_ID
 	add hl, bc
 	ld [hl], a
-	ret
-
-Mobile_InitAnimatedMonIcon:
-	call PartyMenu_InitAnimatedMonIcon
-	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
-	add hl, bc
-	ld a, SPRITE_ANIM_FUNC_NULL
-	ld [hl], a
-	ld hl, SPRITEANIMSTRUCT_XCOORD
-	add hl, bc
-	ld a, 9 * TILE_WIDTH
-	ld [hl], a
-	ld hl, SPRITEANIMSTRUCT_YCOORD
-	add hl, bc
-	ld a, 9 * TILE_WIDTH
-	ld [hl], a
-	ret
-
-Mobile_InitPartyMenuBGPal71:
-	call InitPartyMenuIcon
-	call SetPartyMonIconAnimSpeed
-	ld hl, SPRITEANIMSTRUCT_ANIM_SEQ_ID
-	add hl, bc
-	ld a, SPRITE_ANIM_FUNC_NULL
-	ld [hl], a
-	ld hl, SPRITEANIMSTRUCT_XCOORD
-	add hl, bc
-	ld a, 3 * TILE_WIDTH
-	ld [hl], a
-	ld hl, SPRITEANIMSTRUCT_YCOORD
-	add hl, bc
-	ld a, 12 * TILE_WIDTH
-	ld [hl], a
-	ld a, c
-	ld [wc608], a
-	ld a, b
-	ld [wc608 + 1], a
 	ret
 
 PartyMenu_InitAnimatedMonIcon:

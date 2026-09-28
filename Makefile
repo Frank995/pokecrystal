@@ -17,9 +17,7 @@ rom_obj := \
 	gfx/misc.o \
 	gfx/pics.o \
 	gfx/sprites.o \
-	gfx/tilesets.o \
-	lib/mobile/main.o \
-	lib/mobile/mail.o
+	gfx/tilesets.o
 
 pokecrystal_obj         := $(rom_obj:.o=.o)
 pokecrystal_debug_obj   := $(rom_obj:.o=_debug.o)
@@ -83,18 +81,10 @@ tidy:
 	$(RM) $(roms) \
 	      $(roms:.gbc=.sym) \
 	      $(roms:.gbc=.map) \
-	      $(patches) \
-	      $(patches:.patch=_vc.gbc) \
-	      $(patches:.patch=_vc.sym) \
-	      $(patches:.patch=_vc.map) \
-	      $(patches:%.patch=vc/%.constants.sym) \
 	      $(pokecrystal_obj) \
 	      $(pokecrystal_debug_obj) \
 	      rgbdscheck.o
 	$(MAKE) clean -C tools/
-
-compare: $(roms) $(patches)
-	@$(SHA1) -c roms.sha1
 
 tools:
 	$(MAKE) -C tools/
@@ -108,10 +98,6 @@ endif
 
 $(pokecrystal_obj):         RGBASMFLAGS +=
 $(pokecrystal_debug_obj):   RGBASMFLAGS += -D _DEBUG
-
-%.patch: %_vc.gbc %.gbc vc/%.patch.template
-# Ignore the checksums added by tools/stadium at the end of the ROM
-	tools/make_patch --ignore 0x1ffde0:0x220 $*_vc.sym $^ $@
 
 rgbdscheck.o: rgbdscheck.asm
 	$(RGBASM) -o $@ $<
@@ -145,7 +131,6 @@ pokecrystal_debug.gbc:   RGBFIXFLAGS += -i BYTE -n 0
 %.gbc: $$(%_obj) layout.link
 	$(RGBLINK) $(RGBLINKFLAGS) -l layout.link -n $*.sym -m $*.map -o $@ $(filter %.o,$^)
 	$(RGBFIX) $(RGBFIXFLAGS) $@
-	tools/stadium $@
 
 
 ### LZ compression rules

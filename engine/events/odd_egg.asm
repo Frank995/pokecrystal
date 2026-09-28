@@ -1,4 +1,4 @@
-_GiveOddEgg:
+GiveOddEgg:
 	; Figure out which egg to give.
 
 	; Compare a random word to probabilities out of $ffff.
@@ -56,20 +56,20 @@ _GiveOddEgg:
 	ld hl, wNumItems
 	call TossItem
 
-	; load species in wMobileMonSpecies
+	; load species in wGiftMonSpecies
 	ld a, EGG
-	ld [wMobileMonMiscSpecies], a
+	ld [wGiftMonMiscSpecies], a
 
-	; load pointer to (wMobileMonSpecies - 1) in wMobileMonSpeciesPointer
-	ld a, LOW(wMobileMonMiscSpecies - 1)
-	ld [wMobileMonSpeciesPointer], a
-	ld a, HIGH(wMobileMonMiscSpecies - 1)
-	ld [wMobileMonSpeciesPointer + 1], a
-	; load pointer to wOddEgg in wMobileMonStructPointer
+	; load pointer to (wGiftMonSpecies - 1) in wGiftMonSpeciesPointer
+	ld a, LOW(wGiftMonMiscSpecies - 1)
+	ld [wGiftMonSpeciesPointer], a
+	ld a, HIGH(wGiftMonMiscSpecies - 1)
+	ld [wGiftMonSpeciesPointer + 1], a
+	; load pointer to wOddEgg in wGiftMonStructPointer
 	ld a, LOW(wOddEgg)
-	ld [wMobileMonStructPointer], a
+	ld [wGiftMonStructPointer], a
 	ld a, HIGH(wOddEgg)
-	ld [wMobileMonStructPointer + 1], a
+	ld [wGiftMonStructPointer + 1], a
 
 	; load Odd Egg Name in wTempOddEggNickname
 	ld hl, .Odd
@@ -77,20 +77,122 @@ _GiveOddEgg:
 	ld bc, MON_NAME_LENGTH
 	call CopyBytes
 
-	; load pointer to wTempOddEggNickname in wMobileMonOTPointer
+	; load pointer to wTempOddEggNickname in wGiftMonOTPointer
 	ld a, LOW(wTempOddEggNickname)
-	ld [wMobileMonOTPointer], a
+	ld [wGiftMonOTPointer], a
 	ld a, HIGH(wTempOddEggNickname)
-	ld [wMobileMonOTPointer + 1], a
-	; load pointer to wOddEggName in wMobileMonNicknamePointer
+	ld [wGiftMonOTPointer + 1], a
+	; load pointer to wOddEggName in wGiftMonNicknamePointer
 	ld a, LOW(wOddEggName)
-	ld [wMobileMonNicknamePointer], a
+	ld [wGiftMonNicknamePointer], a
 	ld a, HIGH(wOddEggName)
-	ld [wMobileMonNicknamePointer + 1], a
-	farcall AddMobileMonToParty
-	ret
+	ld [wGiftMonNicknamePointer + 1], a
+	jp AddOddEggToParty
 
 .Odd:
 	dname "ODD", MON_NAME_LENGTH + 1
 
 INCLUDE "data/events/odd_eggs.asm"
+
+AddOddEggToParty:
+	ld hl, wPartyCount
+	ld a, [hl]
+	ld e, a
+	inc [hl]
+
+	ld a, [wGiftMonSpeciesPointer]
+	ld l, a
+	ld a, [wGiftMonSpeciesPointer + 1]
+	ld h, a
+	inc hl
+	ld bc, wPartySpecies
+	ld d, e
+.loop1
+	inc bc
+	dec d
+	jr nz, .loop1
+	ld a, e
+	ld [wCurPartyMon], a
+	ld a, [hl]
+	ld [bc], a
+	inc bc
+	ld a, -1
+	ld [bc], a
+
+	ld hl, wPartyMon1Species
+	ld bc, PARTYMON_STRUCT_LENGTH
+	ld a, e
+	ld [wGiftMonIndex], a
+.loop2
+	add hl, bc
+	dec a
+	and a
+	jr nz, .loop2
+	ld e, l
+	ld d, h
+	ld a, [wGiftMonStructPointer]
+	ld l, a
+	ld a, [wGiftMonStructPointer + 1]
+	ld h, a
+	ld bc, PARTYMON_STRUCT_LENGTH
+	call CopyBytes
+
+	ld hl, wPartyMonOTs
+	ld bc, NAME_LENGTH
+	ld a, [wGiftMonIndex]
+.loop3
+	add hl, bc
+	dec a
+	and a
+	jr nz, .loop3
+	ld e, l
+	ld d, h
+	ld a, [wGiftMonOTPointer]
+	ld l, a
+	ld a, [wGiftMonOTPointer + 1]
+	ld h, a
+	ld bc, MON_NAME_LENGTH - 1
+	call CopyBytes
+	ld a, '@'
+	ld [de], a
+
+	ld hl, wPartyMonNicknames
+	ld bc, MON_NAME_LENGTH
+	ld a, [wGiftMonIndex]
+.loop4
+	add hl, bc
+	dec a
+	and a
+	jr nz, .loop4
+	ld e, l
+	ld d, h
+	ld a, [wGiftMonNicknamePointer]
+	ld l, a
+	ld a, [wGiftMonNicknamePointer + 1]
+	ld h, a
+	ld bc, MON_NAME_LENGTH - 1
+	call CopyBytes
+	ld a, '@'
+	ld [de], a
+
+	ld hl, sPartyMail
+	ld bc, MAIL_STRUCT_LENGTH
+	ld a, [wGiftMonIndex]
+.loop5
+	add hl, bc
+	dec a
+	and a
+	jr nz, .loop5
+	ld a, BANK(sPartyMail)
+	call OpenSRAM
+	ld e, l
+	ld d, h
+	ld a, [wGiftMonMailPointer]
+	ld l, a
+	ld a, [wGiftMonMailPointer + 1]
+	ld h, a
+	ld bc, MAIL_STRUCT_LENGTH
+	call CopyBytes
+
+	call CloseSRAM
+	ret

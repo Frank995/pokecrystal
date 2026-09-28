@@ -80,7 +80,7 @@ NamingScreenJumptable:
 	dw .Rival
 	dw .Mom
 	dw .Box
-	dw .Friend
+	dw .Pokemon
 	dw .Pokemon
 	dw .Pokemon
 	assert_table_length NUM_NAMING_SCREEN_TYPES
@@ -181,16 +181,6 @@ NamingScreenJumptable:
 
 .BoxNameString:
 	db "BOX NAME?@"
-
-.Friend:
-	hlcoord 3, 2
-	ld de, .FriendsNameString
-	call PlaceString
-	call .StoreSpriteIconParams
-	ret
-
-.FriendsNameString:
-	db "おともだち　の　なまえは？@"
 
 .LoadSprite:
 	push de

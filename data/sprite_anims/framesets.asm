@@ -39,21 +39,8 @@ SpriteAnimFrameData:
 	dw .Frameset_EggHatch4
 	dw .Frameset_GSIntroHoOhLugia
 	dw .Frameset_HeadbuttTree
-	dw .Frameset_EZChatCursor1
-	dw .Frameset_EZChatCursor2
-	dw .Frameset_EZChatCursor3
-	dw .Frameset_EZChatCursor4
-	dw .Frameset_EZChatCursor5
-	dw .Frameset_EZChatCursor6
-	dw .Frameset_EZChatCursor7
 	dw .Frameset_BlueWalk
 	dw .Frameset_MagnetTrainBlue
-	dw .Frameset_MobileTradeSentBall
-	dw .Frameset_MobileTradeOTBall
-	dw .Frameset_MobileTradeCableBulge
-	dw .Frameset_MobileTradeSentPulse
-	dw .Frameset_MobileTradeOTPulse
-	dw .Frameset_MobileTradePing
 	dw .Frameset_IntroSuicune
 	dw .Frameset_IntroSuicune2
 	dw .Frameset_IntroPichu
@@ -342,89 +329,6 @@ SpriteAnimFrameData:
 	oamframe SPRITE_ANIM_OAMSET_TREE_1,           2
 	oamframe SPRITE_ANIM_OAMSET_HEADBUTT_TREE_2,  2, B_OAM_XFLIP
 	oamrestart
-
-.Frameset_EZChatCursor1:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_1,  2
-	oamend
-
-.Frameset_EZChatCursor2:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_2,  2
-	oamend
-
-.Frameset_EZChatCursor3:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_3,  2
-	oamend
-
-.Frameset_EZChatCursor4:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_4,  2
-	oamend
-
-.Frameset_EZChatCursor5:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_5,  2
-	oamend
-
-.Frameset_EZChatCursor6:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_6,  2
-	oamend
-
-.Frameset_EZChatCursor7:
-	oamframe SPRITE_ANIM_OAMSET_EZCHAT_CURSOR_7,  2
-	oamend
-
-.Frameset_MobileTradeSentBall:
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POOF_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POOF_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POOF_3,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3, B_OAM_XFLIP
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3, B_OAM_XFLIP
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3, B_OAM_XFLIP
-	oamend
-
-.Frameset_MobileTradeOTBall:
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3, B_OAM_XFLIP
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3, B_OAM_XFLIP
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POKE_BALL_2,  3, B_OAM_XFLIP
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POOF_1,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POOF_2,  3
-	oamframe SPRITE_ANIM_OAMSET_TRADE_POOF_3,  3
-	oamdelete
-
-.Frameset_MobileTradeCableBulge:
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_CABLE_BULGE_1,  3
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_CABLE_BULGE_2,  3
-	oamrestart
-
-.Frameset_MobileTradeSentPulse:
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_SENT_PULSE,  3
-	oamend
-
-.Frameset_MobileTradeOTPulse:
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_OT_PULSE,  3
-	oamend
-
-.Frameset_MobileTradePing:
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_PING_1,  2
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_PING_2,  2
-	oamframe SPRITE_ANIM_OAMSET_MOBILE_TRADE_PING_3,  2
-	oamdelete
 
 .Frameset_IntroSuicune:
 	oamframe SPRITE_ANIM_OAMSET_INTRO_SUICUNE_1,  3
