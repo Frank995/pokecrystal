@@ -14,6 +14,10 @@ GoldenrodMagnetTrainStationNoopScene:
 GoldenrodMagnetTrainStationOfficerScript:
 	faceplayer
 	opentext
+if DEF(_DEBUG)
+; Debug builds run the Magnet Train before power is restored to Kanto.
+	sjump .MagnetTrainToSaffron
+endc
 	checkevent EVENT_RESTORED_POWER_TO_KANTO
 	iftrue .MagnetTrainToSaffron
 	writetext GoldenrodMagnetTrainStationOfficerTheTrainHasntComeInText

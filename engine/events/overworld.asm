@@ -33,6 +33,16 @@ GetPartyNickname:
 	call CopyName2
 	ret
 
+CheckFieldMoveBadge:
+; Check engine flag de (ENGINE_ZEPHYRBADGE thru ENGINE_EARTHBADGE)
+; Return carry if the badge is not owned
+if DEF(_DEBUG)
+; Debug builds can use every field move without its badge.
+	xor a
+	ret
+endc
+	; fallthrough
+
 CheckEngineFlag:
 ; Check engine flag de
 ; Return carry if flag is not set
@@ -50,7 +60,7 @@ CheckEngineFlag:
 CheckBadge:
 ; Check engine flag a (ENGINE_ZEPHYRBADGE thru ENGINE_EARTHBADGE)
 ; Display "Badge required" text and return carry if the badge is not owned
-	call CheckEngineFlag
+	call CheckFieldMoveBadge
 	ret nc
 	ld hl, .BadgeRequiredText
 	call MenuTextboxBackup ; push text to queue
@@ -102,6 +112,20 @@ CheckPartyMove:
 	xor a
 	ret
 .no
+if DEF(_DEBUG)
+; Debug builds let the first non-Egg party mon use any field move.
+	ld hl, wPartySpecies
+	ld e, 0
+.debug_loop
+	ld a, [hli]
+	cp -1
+	jr z, .debug_no
+	cp EGG
+	jr nz, .yes
+	inc e
+	jr .debug_loop
+.debug_no
+endc
 	scf
 	ret
 
@@ -502,7 +526,7 @@ TrySurfOW::
 	jr c, .quit
 
 	ld de, ENGINE_FOGBADGE
-	call CheckEngineFlag
+	call CheckFieldMoveBadge
 	jr c, .quit
 
 	ld d, SURF
@@ -569,7 +593,12 @@ FlyFunction:
 	ldh [hMapAnims], a
 	call LoadStandardMenuHeader
 	call ClearSprites
+if DEF(_DEBUG)
+; Debug builds can fly to any flypoint in either region.
+	farcall EntireFlyMap
+else
 	farcall _FlyMap
+endc
 	ld a, e
 	cp -1
 	jr z, .illegal
@@ -705,7 +734,7 @@ TryWaterfallOW::
 	call CheckPartyMove
 	jr c, .failed
 	ld de, ENGINE_RISINGBADGE
-	call CheckEngineFlag
+	call CheckFieldMoveBadge
 	jr c, .failed
 	call CheckMapCanWaterfall
 	jr c, .failed
@@ -1057,7 +1086,7 @@ TryStrengthOW:
 	jr c, .nope
 
 	ld de, ENGINE_PLAINBADGE
-	call CheckEngineFlag
+	call CheckFieldMoveBadge
 	jr c, .nope
 
 	ld hl, wBikeFlags
@@ -1190,7 +1219,7 @@ TryWhirlpoolOW::
 	call CheckPartyMove
 	jr c, .failed
 	ld de, ENGINE_GLACIERBADGE
-	call CheckEngineFlag
+	call CheckFieldMoveBadge
 	jr c, .failed
 	call TryWhirlpoolMenu
 	jr c, .failed
@@ -1762,7 +1791,7 @@ TryCutOW::
 	jr c, .cant_cut
 
 	ld de, ENGINE_HIVEBADGE
-	call CheckEngineFlag
+	call CheckFieldMoveBadge
 	jr c, .cant_cut
 
 	ld a, BANK(AskCutScript)

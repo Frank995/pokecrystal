@@ -613,6 +613,9 @@ InitializeEventsScript:
 	setevent EVENT_SAFFRON_TRAIN_STATION_POPULATION
 	setevent EVENT_INDIGO_PLATEAU_POKECENTER_RIVAL
 	setevent EVENT_INITIALIZED_EVENTS
+if DEF(_DEBUG)
+	farscall DebugNewGameScript
+endc
 	endcallback
 
 AskNumber1MScript:

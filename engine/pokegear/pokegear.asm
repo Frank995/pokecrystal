@@ -2792,9 +2792,9 @@ INCBIN "gfx/pokegear/dexmap_nest_icon.2bpp"
 FlyMapLabelBorderGFX:
 INCBIN "gfx/pokegear/flymap_label_border.1bpp"
 
-EntireFlyMap: ; unreferenced
+EntireFlyMap:
 ; Similar to _FlyMap, but scrolls through the entire
-; Flypoints data of both regions. A debug function?
+; Flypoints data of both regions. Used by FlyFunction in debug builds.
 	xor a
 	ld [wTownMapPlayerIconLandmark], a
 	call ClearBGPalettes

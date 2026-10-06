@@ -72,6 +72,10 @@ BattleTowerRoomMenu_PlacePickLevelMenu:
 	ld [wcd4f], a
 	ld a, $1
 	ldh [rWBK], a
+if DEF(_DEBUG)
+; Debug builds can choose L:50-L:100 before entering the Hall of Fame.
+	jr .asm_11896b
+endc
 	ld a, [wStatusFlags]
 	bit STATUSFLAGS_HALL_OF_FAME_F, a
 	jr nz, .asm_11896b
